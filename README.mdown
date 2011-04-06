@@ -28,7 +28,11 @@ Subclass the AsyncMacroCommand, and override the initializeAsyncMacroCommand met
 
 You may add SimpleCommands, AsyncCommands, or AsyncMacroCommands to an AsyncMacroCommands subcommands list. 
 
-In the case where AsyncCommands are added to the MacroAsyncCommand's subcommands list, the AsyncMacroCommand will not process the next subcommand until the AsyncCommand currently being executed calls [self commandComplete]. 
+In the case where AsyncCommands are added to the MacroAsyncCommand's subcommands list, the AsyncMacroCommand will not process the next subcommand until the AsyncCommand currently being executed calls: 
+
+<pre><code>
+[self commandComplete];
+</code></pre>
 
 
 [PureMVC]: http://trac.puremvc.org/PureMVC_ObjectiveC/
