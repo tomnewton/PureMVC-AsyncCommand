@@ -15,13 +15,15 @@ Usage
 Example:
 
 Subclass the AsyncMacroCommand, and override the initializeAsyncMacroCommand method.
-<code>
+
+<pre><code>
 	-(void)initializeAsyncMacroCommand{
 	
 		[self addSubCommand:[CommandOne class]];
 		[self addSubCommand:[CommandTwo class]];
 	}
-</code>
+</code></pre>
+
 You may add SimpleCommands, AsyncCommands, or AsyncMacroCommands to an AsyncMacroCommands subcommands list. 
 
 In the case where AsyncCommands are added to the MacroAsyncCommand's subcommands list, the AsyncMacroCommand will not process the next subcommand until the AsyncCommand currently being executed calls [self commandComplete]. 
