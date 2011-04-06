@@ -1,4 +1,4 @@
-![Alt text](http://a0.twimg.com/profile_images/87099863/box-small.png) PureMVC-AsyncCommand Objective-C
+PureMVC-AsyncCommand Objective-C
 =================================
 
 An AsyncMacroCommand and AsyncCommand for use with the PureMVC framework.
