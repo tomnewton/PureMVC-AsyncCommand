@@ -16,12 +16,14 @@ Example:
 
 Subclass the AsyncMacroCommand, and override the initializeAsyncMacroCommand method.
 
+
 <pre><code>
-	-(void)initializeAsyncMacroCommand{
+-(void)initializeAsyncMacroCommand{
 	
-		[self addSubCommand:[CommandOne class]];
-		[self addSubCommand:[CommandTwo class]];
-	}
+	[self addSubCommand:[CommandOne class]];
+	[self addSubCommand:[CommandTwo class]];
+
+}
 </code></pre>
 
 You may add SimpleCommands, AsyncCommands, or AsyncMacroCommands to an AsyncMacroCommands subcommands list. 
