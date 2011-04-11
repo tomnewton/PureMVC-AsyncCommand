@@ -14,6 +14,7 @@
 
 -(void)setOnCompleteDelegate:(id<AsyncCommandDelegate>)del;
 -(void)commandComplete;
+-(void)commandComplete:(id<INotification>)newNote;
 
 @end
 
@@ -21,5 +22,6 @@
 @protocol AsyncCommandDelegate<NSObject>
 
 -(void)commandComplete;
+-(void)commandComplete:(id<INotification>)newNote;
 
 @end

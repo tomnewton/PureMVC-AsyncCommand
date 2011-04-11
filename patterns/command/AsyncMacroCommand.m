@@ -14,12 +14,13 @@
 
 @synthesize onCompleteDelegate;
 
+
 -(id)init{
 
 	if ( self = [super init] ){
 	
 		_subCommands = [[NSMutableArray alloc] init];
-				
+		_executedCommands = [[NSMutableArray alloc] init];
 		[self initializeAsyncMacroCommand];
 		
 		return self;
@@ -30,7 +31,8 @@
 
 
 //in your subclass - add subcommands via [self addSubcommand:[CommandClass class]];
--(void)initializeAsyncMacroCommand{}
+-(void)initializeAsyncMacroCommand{
+}
 
 
 
@@ -59,6 +61,12 @@
 
 -(void)nextCommand
 {
+	if ( _currentCommand != nil ){
+	
+		[_executedCommands addObject:_currentCommand];
+		_currentCommand = nil;
+	}
+	
 
 	if ( _subCommands.count > 0 )
 	{
@@ -76,17 +84,19 @@
 		if ( isAsync )  //if it is an async command set the onComplete delegate ( which should call this method again )
 		{
 			[(AsyncCommand*)commandInstance setOnCompleteDelegate:self];
+			_currentCommand = commandInstance;
 		}
 		
+
 		//execute the note
 		[commandInstance execute:_note];
 		
 		//if it wasn't an async command, move on.
 		if( !isAsync )
 		{
+			[(NSObject*)commandInstance release];
 			[self nextCommand];
 		}
-		
 	}
 	else 
 	{
@@ -100,7 +110,7 @@
 		[(Notification*)_note release];
 		_note = nil;
 		self.onCompleteDelegate = nil;
-		
+		[self clearExecutedAsyncCommands];
 	}
 
 	
@@ -108,12 +118,42 @@
 
 
 -(void)commandComplete{
-
+	
 	[self nextCommand];
 }
 
 
+-(void)commandComplete:(id<INotification>)newNote{
+
+	[(Notification*)_note release];
+	_note = [(NSObject*)newNote retain];
+	
+	[self commandComplete];
+}
+
+
+
+
+-(void)clearExecutedAsyncCommands{
+	
+	//NSLog(@"Executed Commands to be cleaned up = %d", _executedCommands.count);
+	
+	for ( int i = _executedCommands.count-1 ; i >= 0 ; i-- ){
+	
+		AsyncCommand* command = [_executedCommands objectAtIndex:i];
+		//NSLog(@"command named %@ now has retain count %d",[command class],[command retainCount]);
+		[_executedCommands removeObjectAtIndex:i];
+		[command release];
+		
+	}
+
+	
+	
+}
+
 -(void)dealloc{
+	[_subCommands release];
+	[_executedCommands release];
 	[super dealloc];
 }
 

@@ -9,25 +9,24 @@
 
 @implementation AsyncCommand
 
-@synthesize asyncMacroCommand;
+@synthesize onCompleteDelegate;
 
 
--(void)setOnCompleteDelegate:(id <AsyncCommandDelegate>)del{
-
-	[asyncMacroCommand release];
-	asyncMacroCommand = [del retain];
-}
 
 -(void)commandComplete{
 
-	[self.asyncMacroCommand commandComplete]; //notify the parent AsyncMacroCommand that you're finished.
-	self.asyncMacroCommand = nil;
+	[self.onCompleteDelegate commandComplete]; //notify the parent AsyncMacroCommand that you're finished.
+	
+}
+
+-(void)commandComplete:(id<INotification>)newNote{
+
+	[self.onCompleteDelegate commandComplete:newNote];
 }
 
 
 -(void)dealloc{
-
-	self.asyncMacroCommand = nil;
+	self.onCompleteDelegate = nil;
 	[super dealloc];
 }
 

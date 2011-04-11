@@ -7,6 +7,7 @@
 #import "Notifier.h"
 #import "IAsyncCommand.h"
 #import "INotifier.h"
+#import "AsyncCommand.h"
 
 @interface AsyncMacroCommand : Notifier<IAsyncCommand, AsyncCommandDelegate> {
 
@@ -15,8 +16,9 @@
 @private
 	
 	id<INotification>				_note;
-	
+	id<ICommand>					_currentCommand;
 	NSMutableArray*					_subCommands;
+	NSMutableArray*					_executedCommands;
 }
 
 @property(nonatomic, retain, setter=setOnCompleteDelegate) id<AsyncCommandDelegate> onCompleteDelegate;
@@ -24,5 +26,6 @@
 -(void)addSubCommand:(Class)commandClassRef;
 -(void)initializeAsyncMacroCommand;
 -(void)nextCommand;
+-(void)clearExecutedAsyncCommands;
 
 @end

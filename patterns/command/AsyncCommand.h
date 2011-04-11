@@ -9,10 +9,10 @@
 
 @interface AsyncCommand : SimpleCommand<IAsyncCommand> {
 
-	id<AsyncCommandDelegate> asyncMacroCommand;
+	id<AsyncCommandDelegate> onCompleteDelegate;
 	
 }
 
-@property(nonatomic, retain, setter=setOnCompleteDelegate) id<AsyncCommandDelegate> asyncMacroCommand;
+@property(nonatomic, retain) id<AsyncCommandDelegate> onCompleteDelegate;
 
 @end
