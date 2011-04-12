@@ -12,8 +12,11 @@
 
 @protocol IAsyncCommand<ICommand>
 
+@required
 -(void)setOnCompleteDelegate:(id<AsyncCommandDelegate>)del;
 -(void)commandComplete;
+
+@optional
 -(void)commandComplete:(id<INotification>)newNote;
 
 @end

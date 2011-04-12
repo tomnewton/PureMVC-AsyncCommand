@@ -15,8 +15,8 @@
 	
 @private
 	
-	id<INotification>				_note;
-	id<ICommand>					_currentCommand;
+	id<INotification, NSObject>				_note;
+	id<ICommand, NSObject>			_currentCommand;
 	NSMutableArray*					_subCommands;
 	NSMutableArray*					_executedCommands;
 }

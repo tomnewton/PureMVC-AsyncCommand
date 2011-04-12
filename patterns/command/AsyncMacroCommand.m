@@ -51,9 +51,9 @@
 }
 
 
--(void)execute:(id <INotification>)notification{
+-(void)execute:(id <INotification, NSObject>)notification{
 
-	_note = [(Notification*)notification retain];
+	_note = [notification retain];
 	[self nextCommand];
 	
 }
@@ -76,14 +76,16 @@
 		Class commandClassRef = [next nonretainedObjectValue];
 		
 		//create an instance.
-		id<ICommand>commandInstance = [[commandClassRef alloc] init];
+		id<ICommand,NSObject> commandInstance = [[commandClassRef alloc] init];
 		
 		
-		BOOL isAsync = [(SimpleCommand*)commandInstance isKindOfClass:[AsyncCommand class]];
+		//BOOL isAsync = [(SimpleCommand*)commandInstance isKindOfClass:[AsyncCommand class]];
+		BOOL isAsync = [commandClassRef conformsToProtocol:@protocol(IAsyncCommand)];
+		
 		
 		if ( isAsync )  //if it is an async command set the onComplete delegate ( which should call this method again )
 		{
-			[(AsyncCommand*)commandInstance setOnCompleteDelegate:self];
+			[(id<IAsyncCommand>)commandInstance setOnCompleteDelegate:self];
 			_currentCommand = commandInstance;
 		}
 		
@@ -91,6 +93,7 @@
 		//execute the note
 		[commandInstance execute:_note];
 		
+				
 		//if it wasn't an async command, move on.
 		if( !isAsync )
 		{
@@ -123,10 +126,10 @@
 }
 
 
--(void)commandComplete:(id<INotification>)newNote{
+-(void)commandComplete:(id<INotification, NSObject>)newNote{
 
-	[(Notification*)_note release];
-	_note = [(NSObject*)newNote retain];
+	[_note release];
+	_note = [newNote retain];
 	
 	[self commandComplete];
 }
@@ -140,7 +143,7 @@
 	
 	for ( int i = _executedCommands.count-1 ; i >= 0 ; i-- ){
 	
-		AsyncCommand* command = [_executedCommands objectAtIndex:i];
+		id<IAsyncCommand, NSObject> command = [_executedCommands objectAtIndex:i];
 		//NSLog(@"command named %@ now has retain count %d",[command class],[command retainCount]);
 		[_executedCommands removeObjectAtIndex:i];
 		[command release];
