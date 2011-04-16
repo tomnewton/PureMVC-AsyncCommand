@@ -14,7 +14,7 @@ Usage
 
 Example:
 
-Subclass the AsyncMacroCommand, and override the initializeAsyncMacroCommand method.
+Subclass the AsyncMacroCommand, and override the initializeAsyncMacroCommand method. Add any SimpleCommands or commands which implement the IAsyncCommand protocol like so:
 
 
 <pre><code>
@@ -22,17 +22,19 @@ Subclass the AsyncMacroCommand, and override the initializeAsyncMacroCommand met
 	
 	[self addSubCommand:[CommandOne class]];
 	[self addSubCommand:[CommandTwo class]];
+	[self addSubCommand:[CommandThree class]];
 
 }
 </code></pre>
 
-You may add SimpleCommands, AsyncCommands, or AsyncMacroCommands to an AsyncMacroCommands subcommands list. 
+When the AsyncMacroCommand executes, it will execute the subcommands in the order they are added. The manner in which they are executed is dependent on whether or not they have implement the IAsyncCommand protocol. So if CommandOne and CommandThree implement the IAsyncCommand protocol, and Command Two does not, execution is as follows:
 
-In the case where AsyncCommands are added to the MacroAsyncCommand's subcommands list, the AsyncMacroCommand will not process the next subcommand until the AsyncCommand currently being executed calls: 
+-CommandOne is executed
+-Only when CommandOne is finished and calls [self.onCompleteDelegate commandComplete] will CommandTwo execute
+-CommandThree will execute immediately without waiting for a callback from CommandTwo since CommandTwo is a SimpleCommand.
 
-<pre><code>
-[self commandComplete];
-</code></pre>
+
+Likewise, if you add multiple AsyncCommands one after another, the execution will follow a similar pattern, ensuring that a command is not executed until the preceding command is complete. This can be very useful when you need to make multiple dependent calls to a server, or orchestrate some other sequence of events.
 
 
 [PureMVC]: http://trac.puremvc.org/PureMVC_ObjectiveC/
