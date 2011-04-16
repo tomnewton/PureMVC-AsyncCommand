@@ -27,11 +27,12 @@ Subclass the AsyncMacroCommand, and override the initializeAsyncMacroCommand met
 }
 </code></pre>
 
-When the AsyncMacroCommand executes, it will execute the subcommands in the order they are added. The manner in which they are executed is dependent on whether or not they have implement the IAsyncCommand protocol. So if CommandOne and CommandThree implement the IAsyncCommand protocol, and Command Two does not, execution is as follows:
+When the AsyncMacroCommand is invoked, it executes the subcommands in the order they were added. The manner in which they are executed is dependent on whether or not they have implement the IAsyncCommand protocol. So if CommandOne and CommandThree implement the IAsyncCommand protocol, and Command Two does not, execution is as follows:
 
--CommandOne is executed\n
--Only when CommandOne is finished and calls [self.onCompleteDelegate commandComplete] will CommandTwo execute\n
--CommandThree will execute immediately without waiting for a callback from CommandTwo since CommandTwo is a SimpleCommand.
+
+ * CommandOne is executed
+ * Only when CommandOne is finished and calls [self.onCompleteDelegate commandComplete] will CommandTwo execute
+ * CommandThree will execute immediately without waiting for a callback from CommandTwo since CommandTwo is a SimpleCommand.
 
 
 Likewise, if you add multiple AsyncCommands one after another, the execution will follow a similar pattern, ensuring that a command is not executed until the preceding command is complete. This can be very useful when you need to make multiple dependent calls to a server, or orchestrate some other sequence of events.
