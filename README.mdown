@@ -29,8 +29,8 @@ Subclass the AsyncMacroCommand, and override the initializeAsyncMacroCommand met
 
 When the AsyncMacroCommand executes, it will execute the subcommands in the order they are added. The manner in which they are executed is dependent on whether or not they have implement the IAsyncCommand protocol. So if CommandOne and CommandThree implement the IAsyncCommand protocol, and Command Two does not, execution is as follows:
 
--CommandOne is executed
--Only when CommandOne is finished and calls [self.onCompleteDelegate commandComplete] will CommandTwo execute
+-CommandOne is executed\n
+-Only when CommandOne is finished and calls [self.onCompleteDelegate commandComplete] will CommandTwo execute\n
 -CommandThree will execute immediately without waiting for a callback from CommandTwo since CommandTwo is a SimpleCommand.
 
 
